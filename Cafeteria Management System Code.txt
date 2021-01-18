@@ -1,0 +1,331 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package sc;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.Scanner;
+
+/**
+ *
+ * @author Muzzammil
+ */
+public class Sc {
+
+    public static int TabSize = 4;
+    private LinkedList<CafeteriaItem> unsortedCafeteriaItems;
+    private LinkedList<CafeteriaItem> sortedCafeteriaItems;
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        new Dsa().runProgram();
+        //entry point
+    }
+
+    public void runProgram() {
+        System.out.println("                             ***************************Welcome to Cafeteria Management System******************************");
+
+        initializeData();
+
+        showMenu();
+    }
+
+    private void initializeData() {
+        unsortedCafeteriaItems = new LinkedList<CafeteriaItem>();
+
+        unsortedCafeteriaItems.addFirst(new CafeteriaItem("Apple Juice", "Juice", 70, 100));
+        unsortedCafeteriaItems.add(new CafeteriaItem("Orange Juice", "Juice", 70, 100));
+        unsortedCafeteriaItems.add(new CafeteriaItem("Pineapple Juice", "Juice", 70, 100));
+
+        unsortedCafeteriaItems.add(new CafeteriaItem("Banana Shake", "Shake", 100, 150));
+        unsortedCafeteriaItems.add(new CafeteriaItem("Chocolate Shake", "Shake", 100, 150));
+        unsortedCafeteriaItems.add(new CafeteriaItem("Date Shake", "Shake", 100, 150));
+
+        unsortedCafeteriaItems.add(new CafeteriaItem("7up", "Cold Drink", 30, 100));
+        unsortedCafeteriaItems.add(new CafeteriaItem("Dew", "Cold Drink", 30, 100));
+        unsortedCafeteriaItems.add(new CafeteriaItem("Pepsi", "Cold Drink", 30, 100));
+
+        unsortedCafeteriaItems.add(new CafeteriaItem("Chicken Samosa", "Fried Item", 25, 0));
+        unsortedCafeteriaItems.add(new CafeteriaItem("Aloo Samosa", "Fried Item", 15, 0));
+        unsortedCafeteriaItems.add(new CafeteriaItem("Keema Samosa", "Fried Item", 20, 0));
+        unsortedCafeteriaItems.add(new CafeteriaItem("Vegetable Roll", "Fried Item", 30, 0));
+        unsortedCafeteriaItems.add(new CafeteriaItem("Cheese Vegetable Roll", "Fried Item", 50, 0));
+
+        unsortedCafeteriaItems.add(new CafeteriaItem("Kringcle Chips", "Chips", 50, 100));
+        unsortedCafeteriaItems.add(new CafeteriaItem("Lays", "Chips", 20, 50));
+        unsortedCafeteriaItems.add(new CafeteriaItem("Kurleez", "Chips", 20, 50));
+        unsortedCafeteriaItems.add(new CafeteriaItem("Slanty", "Chips", 10, 50));
+        unsortedCafeteriaItems.add(new CafeteriaItem("Wavy", "Chips", 30, 70));
+
+        unsortedCafeteriaItems.add(new CafeteriaItem("Gol Gappay", "Others", 70, 100));
+        unsortedCafeteriaItems.add(new CafeteriaItem("Chaat", "Others", 70, 100));
+//        cafeteriaItems.add(new CafeteriaItem("Noodles", "Others", 30, 50));
+        unsortedCafeteriaItems.addLast(new CafeteriaItem("Noodles", "Others", 30, 50));
+
+        sortedCafeteriaItems = (LinkedList<CafeteriaItem>) unsortedCafeteriaItems.clone();
+    }
+
+    private void showMenu() {
+        System.out.println("\n");
+        System.out.println("                                1. Show unsorted list of items:\n");
+        System.out.println("                                2. Show list of items, sorted by names in ascending order:\n");
+        System.out.println("                                3. Show list of items, sorted by names in descending order:\n");
+        System.out.println("                                4. Show list of items, sorted by their category names in ascending order:\n");
+        System.out.println("                                5. Search an item by name:\n");
+        System.out.println("                                6. Buy an item:\n");
+        System.out.println("                                Press any other key to exit program:\n");
+
+        Scanner scanner = new Scanner(System.in);
+
+        String input = scanner.next();
+
+        switch (input) {
+            case "1":
+                //show unsorted list of items.
+                showUnsortedList();
+                showMenu();
+                break;
+            case "2":
+                //sort items by name, in Ascending order, using bubble sort.
+                showListSortedInAscendingOrderByName();
+                showMenu();
+                break;
+            case "3":
+                //sort items by name, in Descending order, using bubble sort.
+                showListSortedInDescendingOrderByName();
+                showMenu();
+                break;
+            case "4":
+                //sort items by their category names, in Ascending order, using bubble sort.
+                showListSortedInAscendingOrderByCategoryName();
+                showMenu();
+                break;
+            case "5":
+                //search for an item by name, using linear search.
+                searchItemByName();
+                showMenu();
+                break;
+            case "6":
+                //buy an item then serve it in a file.
+                buyItemByName();
+                System.out.println("\n                                                 ***********Thank you for using cafeteria management system**********\n");
+                break;
+            default:
+                System.out.println("\n                                                 ***********Thank you for using cafeteria management system**********\n");
+                break;
+        }
+    }
+
+    private void showUnsortedList() {
+        int lengthOfItems = unsortedCafeteriaItems.size();
+        for (int i = 0; i < lengthOfItems; i++) {
+            CafeteriaItem item = unsortedCafeteriaItems.get(i);
+            showCafeteriaItem(item);
+        }
+    }
+
+    private void showListSortedInAscendingOrderByName() {
+        int lengthOfItems = sortedCafeteriaItems.size();
+
+        // sorting using bubble sort algorithm.
+        CafeteriaItem temporary;
+        for (int i = 0; i < lengthOfItems; i++) {
+            for (int j = 1; j < (lengthOfItems - i); j++) {
+                int charCode1 = Character.toUpperCase(sortedCafeteriaItems.get(j - 1).getName().charAt(0));
+                int charCode2 = Character.toUpperCase(sortedCafeteriaItems.get(j).getName().charAt(0));
+
+                if (charCode1 > charCode2) {
+                    //swap elements
+                    temporary = sortedCafeteriaItems.get(j - 1);
+                    sortedCafeteriaItems.set(j - 1, sortedCafeteriaItems.get(j));
+                    sortedCafeteriaItems.set(j, temporary);
+                }
+            }
+        }
+
+        for (int i = 0; i < lengthOfItems; i++) {
+            CafeteriaItem item = sortedCafeteriaItems.get(i);
+            showCafeteriaItem(item);
+        }
+    }
+
+    private void showListSortedInDescendingOrderByName() {
+        int lengthOfItems = sortedCafeteriaItems.size();
+
+        // sorting using bubble sort algorithm.
+        CafeteriaItem temporary;
+        for (int i = 0; i < lengthOfItems; i++) {
+            for (int j = 1; j < (lengthOfItems - i); j++) {
+                int charCode1 = Character.toUpperCase(sortedCafeteriaItems.get(j - 1).getName().charAt(0));
+                int charCode2 = Character.toUpperCase(sortedCafeteriaItems.get(j).getName().charAt(0));
+
+                if (charCode1 < charCode2) {
+                    //swap elements
+                    temporary = sortedCafeteriaItems.get(j - 1);
+                    sortedCafeteriaItems.set(j - 1, sortedCafeteriaItems.get(j));
+                    sortedCafeteriaItems.set(j, temporary);
+                }
+            }
+        }
+
+        for (int i = 0; i < lengthOfItems; i++) {
+            CafeteriaItem item = sortedCafeteriaItems.get(i);
+            showCafeteriaItem(item);
+        }
+    }
+
+    private void showListSortedInAscendingOrderByCategoryName() {
+        int lengthOfItems = sortedCafeteriaItems.size();
+
+        // sorting using bubble sort algorithm.
+        CafeteriaItem temporary;
+        for (int i = 0; i < lengthOfItems; i++) {
+            for (int j = 1; j < (lengthOfItems - i); j++) {
+                int charCode1 = Character.toUpperCase(sortedCafeteriaItems.get(j - 1).getCategory().charAt(0));
+                int charCode2 = Character.toUpperCase(sortedCafeteriaItems.get(j).getCategory().charAt(0));
+
+                if (charCode1 > charCode2) {
+                    //swap elements
+                    temporary = sortedCafeteriaItems.get(j - 1);
+                    sortedCafeteriaItems.set(j - 1, sortedCafeteriaItems.get(j));
+                    sortedCafeteriaItems.set(j, temporary);
+                }
+            }
+        }
+
+        for (int i = 0; i < lengthOfItems; i++) {
+            CafeteriaItem item = sortedCafeteriaItems.get(i);
+            showCafeteriaItem(item);
+        }
+    }
+
+    private void searchItemByName() {
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.next();
+
+        int length = unsortedCafeteriaItems.size();
+        for (int i = 0; i < length; i++) {
+            CafeteriaItem item = unsortedCafeteriaItems.get(i);
+            if (input.toLowerCase().equals(item.getName().toLowerCase())) {
+                System.out.println("Item found:");
+                System.out.printf("\n%s, %s, %d, %d", item.getName(), item.getCategory(), item.getPriceRegular(), item.getPriceLarge());
+                return;
+            }
+        }
+        System.out.printf("\nItem Not found with name: %s.", input);
+    }
+
+    private void buyItemByName() {
+        String input = new Scanner(System.in).findInLine(".*");
+
+        int length = unsortedCafeteriaItems.size();
+        for (int i = 0; i < length; i++) {
+            CafeteriaItem item = unsortedCafeteriaItems.get(i);
+            if (input.toLowerCase().equals(item.getName().toLowerCase())) {
+                System.out.println("Item found:");
+                System.out.printf("\n%s, %s, %d, %d", item.getName(), item.getCategory(), item.getPriceRegular(), item.getPriceLarge());
+
+                boolean buyRegular = true;
+
+                if (item.getPriceLarge() > 0) {
+                    System.out.println("\nRegular(R) or Large (L) ??");
+                    String choice = new Scanner(System.in).findInLine(".*");
+                    if (choice.toUpperCase().equals("L")) {
+                        buyRegular = false;
+                    }
+                }
+
+                writeToFile(item, buyRegular);
+                return;
+            }
+        }
+        System.out.printf("\nItem Not found with name: %s.", input);
+    }
+
+    private void writeToFile(CafeteriaItem item, boolean buyRegular) {
+        int price = buyRegular ? item.getPriceRegular() : item.getPriceLarge();
+
+        String data = "\nItem Name: " + item.getName() + "."
+                + "\nItem Category: " + item.getCategory() + "."
+                + "\nItem Price: " + Integer.toString(price) + ".";
+
+        File file = new File("C:\\Users\\personal laptop\\Desktop\\order.txt");
+        FileWriter fr = null;
+        try {
+            fr = new FileWriter(file);
+            fr.write(data);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            //close resources
+            try {
+                fr.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        System.out.println("Item has been served on C:\\Users\\personal laptop\\Desktop\\order.txt file.");
+    }
+
+    public static String PostfixSpace(String str, int numberOfTabsToSuffix) {
+        int size = Dsa.TabSize * numberOfTabsToSuffix;
+
+        while (str.length() < size) {
+            str += " ";
+        }
+
+        return str;
+    }
+
+    private void showCafeteriaItem(CafeteriaItem item) {
+        // \n is for new line.
+        // %s is for a String variable.
+        // %d is for a int variable.
+        System.out.printf(
+                "\n%s %s %s %d",
+                Dsa.PostfixSpace(item.getName(), 6),
+                Dsa.PostfixSpace(item.getCategory(), 5),
+                Dsa.PostfixSpace(Integer.toString(item.getPriceRegular()), 5),
+                item.getPriceLarge()
+        );
+    }
+}
+
+class CafeteriaItem {
+
+    private final String name;
+    private final String category;
+    private final int priceRegular;
+    private final int priceLarge;
+
+    public CafeteriaItem(String name, String category, int priceRegular, int priceLarge) {
+        this.name = name;
+        this.category = category;
+        this.priceRegular = priceRegular;
+        this.priceLarge = priceLarge;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public int getPriceRegular() {
+        return priceRegular;
+    }
+
+    public int getPriceLarge() {
+        return priceLarge;
+    }
+}
